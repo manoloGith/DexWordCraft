@@ -1,0 +1,46 @@
+[package]
+name = "dexwordcraft"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+description = "WordCraft's desktop interface on Android (Samsung DeX, desktop windowing): the native library the Android app loads"
+
+[lib]
+name = "dexwordcraft"
+# cdylib: the library the Android activity loads; lib: the desktop binary and the tests
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+# The same interface in a desktop window, to iterate without a device.
+name = "dexwordcraft-desktop"
+path = "src/main.rs"
+required-features = ["desktop"]
+
+[lints]
+workspace = true
+
+[features]
+desktop = ["eframe/x11", "eframe/wayland"]
+
+[dependencies]
+# WordCraft's engine and desktop interface, from the fork's `dexcraft/android` branch.
+wordcraft-engine = { path = "../../upstream/crates/engine" }
+wordcraft-ui-egui = { path = "../../upstream/crates/ui-egui" }
+# Fonts the user added load from the settings folder at start-up, as on the desktop.
+wordcraft-fonts = { path = "../../upstream/crates/fonts" }
+# Where WordCraft keeps its settings (`ui.json`, the dictionary, recovery copies).
+wordcraft-control-key = { path = "../../upstream/crates/control-key" }
+egui = { version = "0.37", features = ["default_fonts"] }
+# wgpu draws; OpenGL ES (glow) is the fallback.
+eframe = { version = "0.37", default-features = false, features = ["default_fonts", "wgpu", "glow", "accesskit"] }
+log = "0.4"
+serde_json = "1"
+# The shared Android layer of the Crafting Apps: input, lifecycle, pickers, clipboard, printing.
+craft-android = { path = "../../craft-android/crates/craft-android" }
+
+[target.'cfg(target_os = "android")'.dependencies]
+# GameActivity (craft-android's CraftActivity), not NativeActivity: eframe's `accesskit` is only
+# available with it.
+eframe = { version = "0.37", default-features = false, features = ["android-game-activity"] }

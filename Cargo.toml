@@ -1,0 +1,97 @@
+# DexWordCraft: WordCraft's desktop interface on Android, for Samsung DeX and Android desktop windowing.
+#
+# The WordCraft engine and its egui interface come from `upstream/` (a git submodule of the fork
+# manoloGith/wordcraft, branch `dexcraft/android`). This workspace only adds the Android frontend,
+# on top of the shared Android layer in `craft-android/` (a git submodule of manoloGith/craft-android).
+#
+# Path dependencies into `upstream/` resolve their `workspace = true` keys against upstream's own
+# workspace, but `[patch]` only applies from the root of the build, so the patches below mirror
+# upstream's `Cargo.toml` (keep them in step when the submodule moves: `scripts/sync-upstream.sh`).
+
+[workspace]
+resolver = "3"
+members = ["apps/dexwordcraft"]
+exclude = ["upstream", "craft-android"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+rust-version = "1.95"
+repository = "https://github.com/manoloGith/DexWordCraft"
+
+[workspace.lints.rust]
+# Only the Android entry point (`no_mangle`) needs it, with an `allow` where it is.
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+
+# As upstream: dependencies optimized even in debug builds (layout and rendering are slow otherwise).
+[profile.dev.package."*"]
+opt-level = 2
+debug = false
+
+[profile.dev]
+opt-level = 1
+debug = "line-tables-only"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+# Phase 7: dependencies are optimized for size, except those that lay out, shape, draw and
+# decode pages, which stay optimized for speed (the native library is most of the APK).
+[profile.release.package."*"]
+opt-level = "s"
+
+[profile.release.package.wordcraft-layout]
+opt-level = 3
+[profile.release.package.wordcraft-render]
+opt-level = 3
+[profile.release.package.wordcraft-fonts]
+opt-level = 3
+[profile.release.package.vello_cpu]
+opt-level = 3
+[profile.release.package.vello_common]
+opt-level = 3
+[profile.release.package.harfrust]
+opt-level = 3
+[profile.release.package.skrifa]
+opt-level = 3
+[profile.release.package.read-fonts]
+opt-level = 3
+[profile.release.package.epaint]
+opt-level = 3
+[profile.release.package.zune-jpeg]
+opt-level = 3
+[profile.release.package.png]
+opt-level = 3
+[profile.release.package.fdeflate]
+opt-level = 3
+[profile.release.package.miniz_oxide]
+opt-level = 3
+
+# --- mirrored from upstream/Cargo.toml (`[patch.crates-io]`) ---
+[patch.crates-io]
+# Required by craft-pdf: the backend rejects writers that failed during unwinding.
+krilla = { git = "https://github.com/storytold/craft-libs", rev = "1b34eba41e62138fc2438d2734523b302840b45d" }
+ecolor = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+emath = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+epaint = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+epaint_default_fonts = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui-winit = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui-wgpu = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_glow = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_extras = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_kittest = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_system_font_provider = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+eframe = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_demo_lib = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_inspection = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+# DexWordCraft: storytold's winit at that revision plus craft-android's Android patches
+# (craft-android/winit, PATCHES.md: mouse, lifecycle); everything else above mirrors upstream.
+winit = { path = "craft-android/winit" }
