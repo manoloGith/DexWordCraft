@@ -1,8 +1,9 @@
 # Qué probar al instalar DexWordCraft
 
 Instala el APK (`DexWordCraft-…-arm64-v8a.apk` o el de debug de la CI) en un móvil o tableta con
-Android 10 o posterior. Si algo falla, pulsa **Ctrl+Mayús+D** (o abre el icono «DexWordCraft
-diagnostics» del APK de debug), copia el informe y pégalo en el issue o el chat.
+Android 10 o posterior. Si algo falla, instala el APK de debug de la CI y pulsa **Ctrl+Mayús+D**
+(o abre su icono «DexWordCraft diagnostics»), copia el informe y pégalo en el issue o el chat. En
+el APK de release el informe no está a la vista (craft-android lo deja solo para debug).
 
 Marca cada punto con ✅ o ❌ y anota lo que veas.
 
@@ -59,6 +60,8 @@ Marca cada punto con ✅ o ❌ y anota lo que veas.
       archivo aparece con su contenido.
 - [ ] En el selector de guardar, pulsa Atrás o Cancelar: no se guarda nada y la app sigue normal.
 - [ ] Desde «Mis archivos», «Abrir con» un `.docx` → DexWordCraft: se abre en la app.
+- [ ] Desde DexFiles, «Abrir» un `.docx`, un `.odt` o un `.txt` con DexWordCraft: se abre en la app
+      (la app anuncia a DexFiles las extensiones que abre).
 - [ ] Desde otra app, «Compartir» un `.docx` o un `.txt` → DexWordCraft: se abre.
 - [ ] En DeX, arrastra un `.docx` desde «Mis archivos» a la ventana: se abre.
 - [ ] **Pestañas** (debajo de la cinta): abre dos documentos; cada uno tiene su pestaña y la del que

@@ -94,6 +94,16 @@
                 <data android:mimeType="message/rfc822" />
                 <data android:mimeType="application/x-tex" />
             </intent-filter>
+
+            <!-- "Open" from DexFiles (the DeX file manager): its own action, with the extensions it
+                 hands to this app. The same list as WordCraft's File > Open filter
+                 (upstream/crates/ui-egui/src/file_dialogs.rs, DOCUMENTS). craft-android's
+                 CraftActivity opens the document from the intent's data, ClipData or stream. -->
+            <intent-filter>
+                <action android:name="io.github.dexfiles.action.OPEN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="io.github.dexfiles.extensions" android:value="docx,docm,dotx,dotm,doc,dot,odt,ott,fodt,rtf,txt,md,html,htm,mht,mhtml,tex,json,xml" />
         </activity>
 
         <!-- RestartActivity and the clipboard's FileProvider come from craft-activity's manifest. -->

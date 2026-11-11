@@ -1,0 +1,1 @@
+"Open" from DexFiles. Documents handed over by another app at start show at once, not behind the Start screen.

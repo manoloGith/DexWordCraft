@@ -89,9 +89,7 @@ impl DexWord {
     /// Open a document as File › Open does ("Open with", shared and dropped files); a Word
     /// template starts a new document based on it.
     pub fn open(&mut self, path: &str) {
-        if let Err(e) = self.app.open_from_platform(path, None) {
-            self.app.report_open_failure(path, &e);
-        }
+        open_document(&mut self.app, path);
     }
 
     /// The preferences, written now: Android may end the process without calling `on_exit`.
@@ -139,6 +137,18 @@ impl eframe::App for DexWord {
         self.app.session.finish_recovery();
         self.save_prefs();
     }
+}
+
+/// Open a document handed over by another app ("Open with", DexFiles, "Share", the start
+/// command line) as File › Open does, and leave the Start screen (Backstage) for it, as WordCraft
+/// does with documents Finder hands over on macOS: the app starts on the Start screen before the
+/// document arrives. A document that can't be opened says why in the status bar, also out of
+/// Backstage, where that shows.
+pub fn open_document(app: &mut WordApp, path: &str) {
+    if let Err(e) = app.open_from_platform(path, None) {
+        app.report_open_failure(path, &e);
+    }
+    app.ui.backstage = false;
 }
 
 /// The window's options, shared by Android and the desktop binary.
@@ -220,6 +230,27 @@ mod tests {
         assert_eq!(language_tag("C.UTF-8"), None);
         assert_eq!(language_tag("POSIX"), None);
         assert_eq!(language_tag(""), None);
+    }
+
+    /// The app starts on the Start screen; a document another app hands over a moment later
+    /// (DexFiles, "Open with") shows instead of it.
+    #[test]
+    fn a_document_handed_over_after_start_leaves_the_start_screen() {
+        let dir = std::env::temp_dir().join(format!("dexwordcraft-open-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("Letter.txt");
+        std::fs::write(&path, "Dear editor").unwrap();
+        let mut app = WordApp::new(Session::new(wordcraft_engine::doc::Document::new()), Services::default());
+        app.start_screen();
+        assert!(app.ui.backstage, "the app starts on the Start screen");
+        open_document(&mut app, path.to_str().unwrap());
+        assert!(!app.ui.backstage, "the opened document shows");
+        assert_eq!(app.session.doc.plain_text(wordcraft_engine::doc::StoryRef::Body).trim(), "Dear editor");
+        // One that can't be opened leaves it too, so the status bar can say why.
+        app.start_screen();
+        open_document(&mut app, dir.join("Missing.docx").to_str().unwrap());
+        assert!(!app.ui.backstage);
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]

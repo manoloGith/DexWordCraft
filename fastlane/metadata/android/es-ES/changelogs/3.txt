@@ -1,0 +1,1 @@
+«Abrir» desde DexFiles. Los documentos que llegan de otra app con la app cerrada se ven al momento, no detrás de la pantalla de inicio.
