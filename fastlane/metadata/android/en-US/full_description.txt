@@ -1,0 +1,11 @@
+<p><b>DexWordCraft</b> brings the desktop interface of <a href="https://github.com/storytold/wordcraft">WordCraft</a>, an open-source word processor written in Rust, to Android. It is made for <b>Samsung DeX</b> and Android's desktop windowing, with a mouse and a keyboard, and also works on tablets and phones.</p>
+<p><b>All of WordCraft's interface</b>, laid out as on the desktop: the ribbon, the page, the Backstage view and its dialogs.</p>
+<ul>
+<li>Opens and saves Word documents (docx, docm, dotx, doc), OpenDocument (odt), RTF, text, Markdown and HTML</li>
+<li>Styles, lists, tables, headers and footers, footnotes, comments and track changes</li>
+<li>Pictures, shapes, equations, tables of contents, cross-references and mail merge</li>
+<li>Spelling and hyphenation in many languages</li>
+<li>Exports to PDF and prints through Android's print service</li>
+</ul>
+<p><b>Made for Android:</b> open and save with the system file picker (changes go back to the original file), "Open with" and "Share", drag and drop on DeX, a mouse with buttons, wheel and cursors, a physical keyboard with its layout and shortcuts, copy and paste with other apps, the on-screen keyboard on phones, and recovery of your work if Android closes the app.</p>
+<p>No account, no ads and no telemetry. MIT or Apache-2.0 licence. Thanks to WordCraft and its authors, whose engine and interface this app is built on.</p>
