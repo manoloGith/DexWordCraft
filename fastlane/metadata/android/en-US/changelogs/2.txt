@@ -1,0 +1,1 @@
+Document tabs below the ribbon (the × asks about saving). Closing with DeX's X keeps unsaved work for recovery at the next start.

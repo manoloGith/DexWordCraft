@@ -16,7 +16,7 @@ No se reescribe la interfaz: se compila para Android la propia interfaz egui de 
 > plan y las decisiones están en [docs/plan.md](docs/plan.md), y los cambios a WordCraft, en
 > [docs/fork.md](docs/fork.md).
 
-![La interfaz de WordCraft a través de la capa Android, en la versión de escritorio de la app (Xvfb, en español)](docs/images/escritorio-documento-es.png)
+![La interfaz de WordCraft a través de la capa Android, en la versión de escritorio de la app (Xvfb, en español)](docs/images/escritorio-pestanas-es.png)
 
 ## Cómo está hecho
 

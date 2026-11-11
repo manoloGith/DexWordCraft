@@ -21,7 +21,7 @@ ha probado aún en un dispositivo.** La lista de pruebas está en [pruebas.md](p
 | Marcas | Logotipos de ArtCraft solo en `docs/brand/` (la interfaz no los incrusta); el icono de WordCraft solo en la ventana y en el diálogo de actualizaciones | Icono propio; la ventana de Android no usa el icono de egui |
 | Datos y configuración | `$XDG_CONFIG_HOME/wordcraft` en Linux (`wordcraft-control-key`) | craft-android apunta XDG al almacenamiento privado |
 | Formatos | docx, docm, dotx, dotm, doc, dot, odt, ott, fodt, rtf, txt, md, html, htm, mht, mhtml, tex | Filtros de intents `VIEW`/`EDIT`/`SEND` con sus tipos MIME |
-| Autoguardado y recuperación | AutoGuardado de Word para archivos docx; una copia de recuperación de cada documento cambiado cada 10 s, que se ofrece al arrancar | Igual. Si Android cierra la app (la X de DeX no se puede interceptar), se pierden como mucho 10 s. Las preferencias se guardan al perder el foco |
+| Autoguardado y recuperación | AutoGuardado de Word para archivos docx; una copia de recuperación de cada documento cambiado cada 10 s, que se ofrece al arrancar | Igual. Al perder el foco se hace la copia en el momento, así que cerrar con la X de DeX no pierde nada. Las preferencias también se guardan entonces |
 | Guardado atómico | Escribe `.wordcraft-save-….tmp` y lo renombra | El `DocumentStore` de craft-android ignora los nombres con punto y escribe de vuelta al renombrar |
 | Idioma | `WORDCRAFT_LANGUAGE`, luego `sys-locale` | `android_main` convierte el `LANG` de craft-android (`es_ES.UTF-8`) en `WORDCRAFT_LANGUAGE=es-ES`. La región (papel, unidades) sale de `LANG` |
 | Hardware | Leer en voz alta (TTS del sistema) | Sin voz por ahora |
@@ -41,8 +41,16 @@ ha probado aún en un dispositivo.** La lista de pruebas está en [pruebas.md](p
 
 ## Decisiones y límites conocidos
 
-- **Una sola ventana.** «Nueva ventana» y «Cambiar ventanas» funcionan dentro de la app, como en la
-  versión web de WordCraft.
+- **Una sola ventana, con pestañas.** «Nueva ventana» y «Cambiar ventanas» funcionan dentro de la
+  app, como en la versión web de WordCraft. Debajo de la cinta, una pestaña por documento: es la
+  tira de pestañas de craft-android (`craft_android::tabs`, reutilizable en las demás apps),
+  dibujada con el enganche `Services::below_ribbon` del fork. Cada acción es un comando de
+  WordCraft (`view.switchWindows`, `file.close`, `file.new`), así que la × de una pestaña con
+  cambios pregunta si guardar, como Archivo ▸ Cerrar (`src/tabs.rs`).
+- **La X de DeX no se puede interceptar.** Android cierra la actividad sin dejar que la app
+  pregunte. Al perder la ventana el foco (y la X lo provoca), la app guarda las preferencias y una
+  copia de recuperación de cada documento con cambios (`Session::save_recovery_now`, en el fork), y
+  el siguiente arranque ofrece recuperarlos. El botón Atrás y la × de las pestañas sí preguntan.
 - **Imprimir.** Se usa la vía de la versión web (`Services::print`): el panel Imprimir no lista
   impresoras propias, y la impresora, las copias y la doble cara se eligen en el diálogo de Android.
 - **Guardar como.** El selector de Android ofrece el tipo del nombre sugerido y empieza en la

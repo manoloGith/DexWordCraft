@@ -61,15 +61,23 @@ Marca cada punto con ✅ o ❌ y anota lo que veas.
 - [ ] Desde «Mis archivos», «Abrir con» un `.docx` → DexWordCraft: se abre en la app.
 - [ ] Desde otra app, «Compartir» un `.docx` o un `.txt` → DexWordCraft: se abre.
 - [ ] En DeX, arrastra un `.docx` desde «Mis archivos» a la ventana: se abre.
-- [ ] Abre dos documentos: Vista ▸ Cambiar ventanas pasa de uno a otro dentro de la app.
+- [ ] **Pestañas** (debajo de la cinta): abre dos documentos; cada uno tiene su pestaña y la del que
+      se ve está resaltada. Un clic en la otra la muestra; el + crea un documento en blanco.
+- [ ] Modifica un documento: su pestaña muestra un punto « •» en lugar de la ×, y la × vuelve al
+      pasar el ratón por encima.
+- [ ] La × de una pestaña sin cambios la cierra sin preguntar. Con cambios, pregunta Guardar / No
+      guardar / Cancelar (también si es la de un documento que no se está viendo: primero lo
+      muestra). Clic central sobre una pestaña hace lo mismo que su ×.
+- [ ] Con muchos documentos, las pestañas se desplazan en horizontal y la activa queda a la vista.
 - [ ] Archivo ▸ Abrir ▸ Recientes: lista los abiertos, y vuelven a abrirse.
 - [ ] Insertar ▸ Imágenes: elige una imagen PNG o JPEG y se inserta en el documento.
 
 ## 5. Cerrar y recuperar
 - [ ] Haz un cambio y pulsa el botón Atrás: pregunta Guardar / No guardar / Cancelar. Cancelar deja
       la app abierta, y No guardar la cierra.
-- [ ] Haz un cambio sin guardar, espera unos 15 segundos y cierra con la X de DeX (que no pregunta).
-      Al volver a abrir, WordCraft ofrece recuperar el documento con el cambio.
+- [ ] Haz un cambio sin guardar y cierra **enseguida** con la X de DeX (que no pregunta). Al volver
+      a abrir, WordCraft ofrece recuperar el documento con el cambio (la copia se hace al perder la
+      ventana el foco).
 - [ ] Cambia una opción (Archivo ▸ Opciones), cierra con la X y vuelve a abrir: la opción se
       mantiene.
 
@@ -98,7 +106,10 @@ Marca cada punto con ✅ o ❌ y anota lo que veas.
       `renderer glow`; si dice glow, anótalo.
 
 ## Límites conocidos (no son fallos)
-- Los documentos se cambian dentro de una sola ventana, no en ventanas de DeX aparte.
+- Los documentos se cambian dentro de una sola ventana (con las pestañas), no en ventanas de DeX
+  aparte.
+- La X de DeX cierra sin preguntar: Android no deja que la app lo impida. Lo no guardado se
+  recupera al volver a abrir; para que pregunte, usa el botón Atrás o la × de la pestaña.
 - El panel Imprimir no lista impresoras: la impresora, las copias y la doble cara se eligen en el
   diálogo de Android.
 - Leer en voz alta no tiene voz en Android.

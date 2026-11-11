@@ -15,6 +15,6 @@ fn main() {
         log::info!("dexwordcraft: {}", dexwordcraft::renderer_line(cc));
         let services = wordcraft_ui_egui::Services { save_prefs: Some(Box::new(dexwordcraft::prefs::try_save)), ..Default::default() };
         let word = dexwordcraft::DexWord::new(cc, &launch, services);
-        Box::new(craft_android::Shell::new(word).on_focus_lost(|w| w.save_prefs()).title(dexwordcraft::DexWord::title))
+        Box::new(craft_android::Shell::new(word).on_focus_lost(|w| w.focus_lost()).title(dexwordcraft::DexWord::title))
     });
 }

@@ -31,7 +31,7 @@ fn android_main(app: AndroidApp) {
             let word = DexWord::new(cc, &launch, services(print_dir.clone()));
             // craft-android's shell: the activity's mouse, keyboard and insets, Back as the close
             // button (WordCraft asks about unsaved documents), the title for DeX's taskbar.
-            Box::new(craft_android::Shell::new(word).on_focus_lost(|w| w.save_prefs()).title(DexWord::title))
+            Box::new(craft_android::Shell::new(word).on_focus_lost(|w| w.focus_lost()).title(DexWord::title))
         },
     );
     // The window closed (WordCraft allowed it, after asking about unsaved changes).

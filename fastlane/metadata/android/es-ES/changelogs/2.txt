@@ -1,0 +1,1 @@
+Pestañas de documentos debajo de la cinta (la × pregunta si guardar). Al cerrar con la X de DeX, lo no guardado se recupera al volver a abrir.

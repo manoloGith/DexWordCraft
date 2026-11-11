@@ -9,6 +9,7 @@
 //! Android activity has one window (the fork's `dexcraft/android` branch).
 
 pub mod prefs;
+pub mod tabs;
 
 #[cfg(target_os = "android")]
 pub(crate) mod android;
@@ -33,8 +34,10 @@ pub struct DexWord {
 }
 
 impl DexWord {
-    /// WordCraft as its desktop binary starts it, with the host's `services`.
-    pub fn new(cc: &eframe::CreationContext<'_>, launch: &Launch, services: Services) -> DexWord {
+    /// WordCraft as its desktop binary starts it, with the host's `services` and the document
+    /// tabs below the ribbon ([`tabs`]).
+    pub fn new(cc: &eframe::CreationContext<'_>, launch: &Launch, mut services: Services) -> DexWord {
+        services.below_ribbon = Some(Box::new(tabs::show));
         prefs::load_user_fonts();
         // The system region picks the new document's paper, the units and the decimal separator.
         let region = wordcraft_ui_egui::i18n::system_region();
@@ -94,6 +97,14 @@ impl DexWord {
     /// The preferences, written now: Android may end the process without calling `on_exit`.
     pub fn save_prefs(&self) {
         prefs::save(&self.app);
+    }
+
+    /// The window lost focus: DeX's close button (which the app can't intercept), the home
+    /// screen, another app. The preferences and a recovery copy of every document with unsaved
+    /// changes are written now, so the next start offers to recover them.
+    pub fn focus_lost(&mut self) {
+        self.save_prefs();
+        self.app.session.save_recovery_now();
     }
 }
 
