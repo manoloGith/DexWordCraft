@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DexWordCraft's icon: a page of text on a monitor (an original design, the same family as
+     DexPdfCraft's and DexGridCraft's). Drawn inside the adaptive icon's 66 dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- monitor -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3.5" android:fillColor="#00000000"
+        android:pathData="M31,35h46a4,4 0 0 1 4,4v26a4,4 0 0 1 -4,4h-46a4,4 0 0 1 -4,-4v-26a4,4 0 0 1 4,-4z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3.5" android:strokeLineCap="round" android:fillColor="#00000000"
+        android:pathData="M46,78h16M54,69v9" />
+    <!-- page: a white sheet with a folded corner -->
+    <path android:fillColor="#FFFFFFFF" android:pathData="M42,27h18l9,9v24a2,2 0 0 1 -2,2h-25a2,2 0 0 1 -2,-2v-31a2,2 0 0 1 2,-2z" />
+    <path android:fillColor="#FFC9DBF6" android:pathData="M60,27l9,9h-7a2,2 0 0 1 -2,-2z" />
+    <!-- a heading and lines of text, the last one short -->
+    <path android:strokeColor="#FF1C4A92" android:strokeWidth="2.6" android:strokeLineCap="round" android:fillColor="#00000000"
+        android:pathData="M45,35h11" />
+    <path android:strokeColor="#FF3B7BD8" android:strokeWidth="1.8" android:strokeLineCap="round" android:fillColor="#00000000"
+        android:pathData="M45,42h19M45,47h19M45,52h19M45,57h12" />
+</vector>
