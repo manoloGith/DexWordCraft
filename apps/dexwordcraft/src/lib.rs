@@ -104,6 +104,21 @@ impl DexWord {
         self.save_prefs();
         self.app.session.save_recovery_now();
     }
+
+    /// The interface turned dark (or light): the pages follow, with WordCraft's own dark page
+    /// (View › Switch Modes), by craft-android's dark paper rule
+    /// ([`craft_android::paper::on_theme_change`]): on with the dark theme, off with the light
+    /// one, and Switch Modes still flips it by hand until the theme changes again. WordCraft's
+    /// dark page keeps its own paper grey (#333333), which its colours for highlights and text
+    /// on them are measured against (4.5:1), rather than craft-android's #1E1E1E.
+    pub fn on_theme_change(&mut self, dark: bool) {
+        let current = self.app.session.view.dark_mode;
+        if let Some(value) = craft_android::paper::on_theme_change(dark, &current, &false, &true)
+            && let Err(e) = self.app.run("view.darkMode", serde_json::json!({ "value": value }))
+        {
+            log::warn!("dexwordcraft: dark page: {e}");
+        }
+    }
 }
 
 impl eframe::App for DexWord {
