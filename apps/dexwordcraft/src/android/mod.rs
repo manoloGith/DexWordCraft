@@ -2,7 +2,6 @@
 //! Access Framework's pickers, the clipboard, printing). Everything else (the JNI bridge, the
 //! environment, the activity's input, the lifecycle) is craft-android's.
 
-use std::future::Future;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::mpsc::{Receiver, channel};
@@ -53,28 +52,6 @@ fn set_language() {
     unsafe { std::env::set_var("WORDCRAFT_LANGUAGE", tag) };
 }
 
-/// Wait for a picker's answer on a worker thread, then hand it to `then`. The picker itself must
-/// be started on the interface thread, which can't wait: the activity's pause waits for it.
-fn when_picked(picked: platform::pickers::Picked, then: impl FnOnce(Vec<PathBuf>) + Send + 'static) {
-    let spawned = std::thread::Builder::new().name("picker".into()).spawn(move || then(block_on(picked)));
-    if let Err(e) = spawned {
-        log::error!("dexwordcraft: picker thread: {e}");
-    }
-}
-
-/// craft-android's picker futures block inside `poll` until the answer comes, so one poll is
-/// the whole wait.
-fn block_on<T>(future: impl Future<Output = T>) -> T {
-    let mut future = std::pin::pin!(future);
-    let mut cx = std::task::Context::from_waker(std::task::Waker::noop());
-    loop {
-        if let std::task::Poll::Ready(value) = future.as_mut().poll(&mut cx) {
-            return value;
-        }
-        std::thread::yield_now();
-    }
-}
-
 /// WordCraft's filters (`("Documents", ["docx", …])`) as craft-android takes them. A filter with
 /// `*` (All files) makes the picker offer every file.
 fn filters(list: &[(&str, &[&str])]) -> Vec<(String, Vec<String>)> {
@@ -99,10 +76,10 @@ fn file_dialog(request: FileDialogRequest) -> Receiver<FileDialogAnswer> {
             platform::pickers::pick(PickKind::Save, None, &[(ext.to_uppercase(), vec![ext])], Some(name))
         }
     };
-    when_picked(picked, move |paths| {
+    // craft-android waits for the answer on a worker thread, then wakes the interface.
+    platform::pickers::wait(picked, move |paths| {
         let paths = paths.iter().filter_map(|p| p.to_str().map(str::to_owned)).filter(|p| !p.is_empty()).collect();
         let _ = tx.send(Ok(paths));
-        platform::events::wake();
     });
     rx
 }
